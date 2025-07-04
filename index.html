@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Black-Scholes Option Pricing Calculator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-background-gray min-h-screen">
+    <!-- Header -->
+    <header class="bg-surface-white shadow-sm border-b border-gray-200">
+        <div class="max-w-4xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-primary-blue rounded-lg flex items-center justify-center">
+                        <svg class="text-white w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-semibold text-gray-900">Options Pricing Calculator</h1>
+                        <p class="text-sm text-secondary-slate">Black-Scholes Model Implementation</p>
+                    </div>
+                </div>
+                <div class="hidden md:flex items-center space-x-2 text-sm text-secondary-slate">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <span>Professional ESOP Valuation Tool</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-4xl mx-auto px-6 py-8">
+        <!-- Introduction Card -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 mb-8 p-6">
+            <div class="flex items-start space-x-4">
+                <div class="w-12 h-12 bg-blue-50 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <svg class="text-primary-blue w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 002 2z"></path>
+                    </svg>
+                </div>
+                <div>
+                    <h2 class="text-lg font-semibold text-gray-900 mb-2">Black-Scholes Option Pricing Model</h2>
+                    <p class="text-secondary-slate text-sm leading-relaxed">
+                        Calculate the theoretical value of European-style options using the renowned Black-Scholes formula. 
+                        Enter the required parameters below to estimate your option's fair value for ESOP evaluations.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid lg:grid-cols-3 gap-8">
+            <!-- Calculator Form -->
+            <div class="lg:col-span-2">
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+                    <div class="p-6 border-b border-gray-200">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-lg font-semibold text-gray-900">Option Parameters</h3>
+                            <button onclick="resetForm()" class="text-sm text-secondary-slate hover:text-primary-blue px-3 py-1 rounded transition-colors flex items-center">
+                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                                </svg>
+                                Reset Form
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <form id="calculator-form" class="space-y-6">
+                            <!-- Current Share Price -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2 flex items-center">
+                                    Current Share Price (S)
+                                    <div class="tooltip ml-1">
+                                        <svg class="w-3 h-3 text-secondary-slate cursor-help" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                        <span class="tooltiptext">The current market price of the underlying stock</span>
+                                    </div>
+                                </label>
+                                <div class="relative">
+                                    <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">$</span>
+                                    <input type="number" id="currentPrice" step="0.01" placeholder="100.00" 
+                                           class="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
+                                </div>
+                                <div id="currentPrice-error" class="error-text hidden"></div>
+                            </div>
+
+                            <!-- Exercise Price -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2 flex items-center">
+                                    Exercise Price (K)
+                                    <div class="tooltip ml-1">
+                                        <svg class="w-3 h-3 text-secondary-slate cursor-help" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                        <span class="tooltiptext">The strike price at which the option can be exercised</span>
+                                    </div>
+                                </label>
+                                <div class="relative">
+                                    <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">$</span>
+                                    <input type="number" id="exercisePrice" step="0.01" placeholder="110.00" 
+                                           class="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
+                                </div>
+                                <div id="exercisePrice-error" class="error-text hidden"></div>
+                            </div>
+
+                            <!-- Time to Maturity -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2 flex items-center">
+                                    Time to Maturity (T)
+                                    <div class="tooltip ml-1">
+                                        <svg class="w-3 h-3 text-secondary-slate cursor-help" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                        <span class="tooltiptext">Time until option expiration in years (e.g., 0.25 for 3 months)</span>
+                                    </div>
+                                </label>
+                                <div class="relative">
+                                    <input type="number" id="timeToMaturity" step="0.01" placeholder="1.00" 
+                                           class="w-full pr-12 pl-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
+                                    <span class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-sm">years</span>
+                                </div>
+                                <div id="timeToMaturity-error" class="error-text hidden"></div>
+                            </div>
+
+                            <!-- Risk-free Rate -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2 flex items-center">
+                                    Risk-free Rate (r)
+                                    <div class="tooltip ml-1">
+                                        <svg class="w-3 h-3 text-secondary-slate cursor-help" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                        <span class="tooltiptext">Annual risk-free interest rate (e.g., government bond yield)</span>
+                                    </div>
+                                </label>
+                                <div class="relative">
+                                    <input type="number" id="riskFreeRate" step="0.01" placeholder="5.00" 
+                                           class="w-full pr-8 pl-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
+                                    <span class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500">%</span>
+                                </div>
+                                <div id="riskFreeRate-error" class="error-text hidden"></div>
+                            </div>
+
+                            <!-- Volatility -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2 flex items-center">
+                                    Annual Volatility (σ)
+                                    <div class="tooltip ml-1">
+                                        <svg class="w-3 h-3 text-secondary-slate cursor-help" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                        <span class="tooltiptext">Annual volatility of the underlying stock (standard deviation of returns)</span>
+                                    </div>
+                                </label>
+                                <div class="relative">
+                                    <input type="number" id="volatility" step="0.01" placeholder="20.00" 
+                                           class="w-full pr-8 pl-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
+                                    <span class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500">%</span>
+                                </div>
+                                <div id="volatility-error" class="error-text hidden"></div>
+                            </div>
+
+                            <!-- Option Type -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-3 flex items-center">
+                                    Option Type
+                                    <div class="tooltip ml-1">
+                                        <svg class="w-3 h-3 text-secondary-slate cursor-help" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                        <span class="tooltiptext">Call options profit when price goes up, put options profit when price goes down</span>
+                                    </div>
+                                </label>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                                        <input type="radio" name="optionType" value="call" checked class="mr-3">
+                                        <div class="flex items-center">
+                                            <svg class="text-success-green w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                                            </svg>
+                                            <div>
+                                                <div class="font-medium">Call Option</div>
+                                                <div class="text-xs text-gray-500">Bullish position</div>
+                                            </div>
+                                        </div>
+                                    </label>
+                                    <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                                        <input type="radio" name="optionType" value="put" class="mr-3">
+                                        <div class="flex items-center">
+                                            <svg class="text-red-500 w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"></path>
+                                            </svg>
+                                            <div>
+                                                <div class="font-medium">Put Option</div>
+                                                <div class="text-xs text-gray-500">Bearish position</div>
+                                            </div>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Calculate Button -->
+                            <button type="submit" id="calculateBtn" 
+                                    class="w-full bg-primary-blue hover:bg-primary-blue-dark text-white font-semibold py-3 px-4 rounded-md transition-colors flex items-center justify-center">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 002 2z"></path>
+                                </svg>
+                                Calculate Option Value
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Methodology Info -->
+                <div class="mt-6 bg-blue-50 rounded-lg p-4">
+                    <div class="flex items-start space-x-3">
+                        <svg class="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <div>
+                            <h4 class="font-medium text-blue-900 mb-1">About the Black-Scholes Model</h4>
+                            <p class="text-sm text-blue-800 leading-relaxed">
+                                The Black-Scholes model calculates the theoretical price of European-style options using five key factors: current stock price, strike price, time to expiration, risk-free rate, and volatility. This model assumes constant volatility and interest rates, no dividends, and efficient markets.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results Panel -->
+            <div class="lg:col-span-1">
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 sticky top-8">
+                    <div class="p-6 border-b border-gray-200">
+                        <div class="flex items-center space-x-2">
+                            <svg class="w-5 h-5 text-primary-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                            </svg>
+                            <h3 class="text-lg font-semibold text-gray-900">Calculation Results</h3>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div id="results-content">
+                            <div class="text-center p-8">
+                                <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <svg class="text-gray-400 w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 002 2z"></path>
+                                    </svg>
+                                </div>
+                                <p class="text-secondary-slate text-sm">
+                                    Enter the option parameters and click calculate to see the estimated option value
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Examples -->
+                <div class="mt-6 bg-gray-50 rounded-lg p-4">
+                    <h4 class="font-medium text-gray-900 mb-3">Quick Examples</h4>
+                    <div class="space-y-3 text-sm">
+                        <button onclick="loadExample('tech')" class="w-full text-left p-3 bg-white rounded border hover:border-blue-300 transition-colors">
+                            <div class="font-medium text-gray-900">Tech Stock Call</div>
+                            <div class="text-gray-600 text-xs">$100 stock, $110 strike, 1 year</div>
+                        </button>
+                        <button onclick="loadExample('safe')" class="w-full text-left p-3 bg-white rounded border hover:border-blue-300 transition-colors">
+                            <div class="font-medium text-gray-900">Conservative Put</div>
+                            <div class="text-gray-600 text-xs">$50 stock, $45 strike, 6 months</div>
+                        </button>
+                        <button onclick="loadExample('volatile')" class="w-full text-left p-3 bg-white rounded border hover:border-blue-300 transition-colors">
+                            <div class="font-medium text-gray-900">High Volatility Call</div>
+                            <div class="text-gray-600 text-xs">$200 stock, $220 strike, 3 months</div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed top-4 right-4 bg-white border border-gray-200 rounded-lg shadow-lg p-4 transform translate-x-full transition-transform duration-300 z-50 hidden">
+        <div class="flex items-center space-x-3">
+            <div id="toast-icon" class="w-5 h-5"></div>
+            <div>
+                <div id="toast-title" class="font-medium text-gray-900"></div>
+                <div id="toast-description" class="text-sm text-gray-600"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

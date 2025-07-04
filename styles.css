@@ -1,0 +1,186 @@
+/* Custom styles for Black-Scholes Calculator */
+
+body { 
+    font-family: 'Inter', sans-serif; 
+}
+
+.bg-primary-blue { 
+    background-color: #4285f4; 
+}
+
+.text-primary-blue { 
+    color: #4285f4; 
+}
+
+.text-secondary-slate { 
+    color: #64748b; 
+}
+
+.text-success-green { 
+    color: #10b981; 
+}
+
+.bg-background-gray { 
+    background-color: #f8fafc; 
+}
+
+.bg-surface-white { 
+    background-color: #ffffff; 
+}
+
+.hover\:bg-primary-blue-dark:hover { 
+    background-color: #3367d6; 
+}
+
+.bg-green-50 { 
+    background-color: #f0fdf4; 
+}
+
+.text-red-500 { 
+    color: #ef4444; 
+}
+
+/* Loading animation */
+.loading-spinner {
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid #4285f4;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    animation: spin 1s linear infinite;
+    display: inline-block;
+    margin-right: 8px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Tooltip styles */
+.tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 200px;
+    background-color: #333;
+    color: white;
+    text-align: center;
+    border-radius: 6px;
+    padding: 8px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -100px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    font-size: 12px;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* Input focus styles */
+input:focus {
+    outline: none;
+    ring: 2px;
+    ring-color: #4285f4;
+    border-color: #4285f4;
+}
+
+/* Radio button styling */
+input[type="radio"]:checked {
+    accent-color: #4285f4;
+}
+
+/* Success animation */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in-up {
+    animation: fadeInUp 0.5s ease-out;
+}
+
+/* Error styles */
+.error-border {
+    border-color: #ef4444 !important;
+}
+
+.error-text {
+    color: #ef4444;
+    font-size: 12px;
+    margin-top: 4px;
+}
+
+/* Card hover effects */
+.card-hover:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+/* Button animations */
+.btn-animate {
+    transition: all 0.2s ease;
+}
+
+.btn-animate:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(66, 133, 244, 0.3);
+}
+
+/* Results panel styling */
+.results-panel {
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+}
+
+/* Form field spacing */
+.form-field {
+    margin-bottom: 1.5rem;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 768px) {
+    .tooltip .tooltiptext {
+        width: 150px;
+        margin-left: -75px;
+    }
+    
+    .grid-cols-2 {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+}
